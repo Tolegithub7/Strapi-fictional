@@ -21,6 +21,16 @@
       "type": "component",
       "component": "layout.banner",
       "repeatable": false
+    },
+    "header": {
+      "type": "component",
+      "component": "layout.header",
+      "repeatable": false
+    },
+    "footer": {
+      "type": "component",
+      "component": "layout.footer",
+      "repeatable": false
     }
   }
 }
