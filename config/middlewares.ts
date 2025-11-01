@@ -1,4 +1,5 @@
 export default [
+  { resolve: './src/middlewares/tenant' },
   'strapi::logger',
   'strapi::errors',
   'strapi::security',
