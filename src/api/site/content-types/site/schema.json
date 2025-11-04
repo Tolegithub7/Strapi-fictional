@@ -16,6 +16,14 @@
       "relation": "manyToOne",
       "target": "api::tenant.tenant",
       "inversedBy": "sites"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "Title": {
+      "type": "component",
+      "component": "shared.link",
+      "repeatable": false
     }
   }
 }
