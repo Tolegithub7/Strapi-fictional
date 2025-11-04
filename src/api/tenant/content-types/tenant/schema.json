@@ -23,9 +23,9 @@
     "settings": {
       "type": "json"
     },
-    "users_permissions_user": {
+    "users_permissions_users": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "plugin::users-permissions.user"
     },
     "sites": {

@@ -430,6 +430,39 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBlogBlog extends Struct.SingleTypeSchema {
+  collectionName: 'blogs';
+  info: {
+    displayName: 'Blog';
+    pluralName: 'blogs';
+    singularName: 'blog';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    admin_users: Schema.Attribute.Relation<'oneToMany', 'admin::user'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Image: Schema.Attribute.Media<'images' | 'files'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::blog.blog'> &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Component<'shared.logo-link', false>;
+    makeVisible: Schema.Attribute.Boolean;
+    publishedAt: Schema.Attribute.DateTime;
+    richText: Schema.Attribute.Blocks;
+    sharedlink: Schema.Attribute.Component<'shared.link', false>;
+    site: Schema.Attribute.Relation<'oneToOne', 'api::site.site'>;
+    tenant: Schema.Attribute.Relation<'oneToOne', 'api::tenant.tenant'>;
+    Title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   collectionName: 'globals';
   info: {
@@ -515,8 +548,8 @@ export interface ApiTenantTenant extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_user: Schema.Attribute.Relation<
-      'oneToOne',
+    users_permissions_users: Schema.Attribute.Relation<
+      'oneToMany',
       'plugin::users-permissions.user'
     >;
   };
@@ -1032,6 +1065,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::blog.blog': ApiBlogBlog;
       'api::global.global': ApiGlobalGlobal;
       'api::site.site': ApiSiteSite;
       'api::tenant.tenant': ApiTenantTenant;
