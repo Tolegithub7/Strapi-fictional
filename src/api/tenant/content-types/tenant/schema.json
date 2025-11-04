@@ -33,6 +33,12 @@
       "relation": "oneToMany",
       "target": "api::site.site",
       "mappedBy": "tenant"
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post.post",
+      "mappedBy": "tenant"
     }
   }
 }

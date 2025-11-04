@@ -33,10 +33,10 @@
       "relation": "oneToOne",
       "target": "api::tenant.tenant"
     },
-    "admin_users": {
+    "users_permissions_users": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "admin::user"
+      "target": "plugin::users-permissions.user"
     },
     "sharedlink": {
       "type": "component",
