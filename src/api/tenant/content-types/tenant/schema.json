@@ -39,6 +39,11 @@
       "relation": "oneToMany",
       "target": "api::post.post",
       "mappedBy": "tenant"
+    },
+    "admin_users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "admin::user"
     }
   }
 }

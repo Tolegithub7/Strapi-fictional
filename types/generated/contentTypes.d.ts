@@ -566,6 +566,7 @@ export interface ApiTenantTenant extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    admin_users: Schema.Attribute.Relation<'oneToMany', 'admin::user'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
