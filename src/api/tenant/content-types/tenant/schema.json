@@ -44,6 +44,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "admin::user"
+    },
+    "tenant_roles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tenant-role.tenant-role",
+      "mappedBy": "tenant"
     }
   }
 }

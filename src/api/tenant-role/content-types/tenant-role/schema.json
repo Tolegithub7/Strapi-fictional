@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tenant_roles",
+  "info": {
+    "singularName": "tenant-role",
+    "pluralName": "tenant-roles",
+    "displayName": "Tenant Role"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "permissions": {
+      "type": "json"
+    },
+    "tenant": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tenant.tenant",
+      "inversedBy": "tenant_roles"
+    }
+  }
+}

@@ -555,6 +555,72 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTenantRoleTenantRole extends Struct.CollectionTypeSchema {
+  collectionName: 'tenant_roles';
+  info: {
+    displayName: 'Tenant Role';
+    pluralName: 'tenant-roles';
+    singularName: 'tenant-role';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tenant-role.tenant-role'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    permissions: Schema.Attribute.JSON;
+    publishedAt: Schema.Attribute.DateTime;
+    tenant: Schema.Attribute.Relation<'manyToOne', 'api::tenant.tenant'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTenantUserTenantUser extends Struct.CollectionTypeSchema {
+  collectionName: 'tenant_users';
+  info: {
+    displayName: 'Tenant User';
+    pluralName: 'tenant-users';
+    singularName: 'tenant-user';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tenant-user.tenant-user'
+    > &
+      Schema.Attribute.Private;
+    password: Schema.Attribute.Password;
+    publishedAt: Schema.Attribute.DateTime;
+    tenant: Schema.Attribute.Relation<'oneToOne', 'api::tenant.tenant'>;
+    tenant_role: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::tenant-role.tenant-role'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    username: Schema.Attribute.String;
+  };
+}
+
 export interface ApiTenantTenant extends Struct.CollectionTypeSchema {
   collectionName: 'tenants';
   info: {
@@ -582,6 +648,10 @@ export interface ApiTenantTenant extends Struct.CollectionTypeSchema {
     settings: Schema.Attribute.JSON;
     sites: Schema.Attribute.Relation<'oneToMany', 'api::site.site'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    tenant_roles: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tenant-role.tenant-role'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1106,6 +1176,8 @@ declare module '@strapi/strapi' {
       'api::global.global': ApiGlobalGlobal;
       'api::post.post': ApiPostPost;
       'api::site.site': ApiSiteSite;
+      'api::tenant-role.tenant-role': ApiTenantRoleTenantRole;
+      'api::tenant-user.tenant-user': ApiTenantUserTenantUser;
       'api::tenant.tenant': ApiTenantTenant;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
