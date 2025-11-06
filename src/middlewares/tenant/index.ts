@@ -15,7 +15,7 @@ export default (config: any, { strapi }: { strapi: any }) => {
       return;
     }
 
-    ctx.state.tenant = tenant;
+    ctx.state.tenant = tenant; // 🧩 store tenant in context
     await next();
   };
 };
