@@ -1,9 +1,10 @@
 export default [
-  { resolve: './src/middlewares/tenant' },
-  { resolve: './src/middlewares/tenant-filter' },
   'strapi::logger',
   'strapi::errors',
   'strapi::security',
+  { resolve: './src/middlewares/db-switch' },
+  { resolve: './src/middlewares/tenant' },
+  { resolve: './src/middlewares/tenant-filter' },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::query',
