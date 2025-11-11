@@ -10,12 +10,13 @@ export default (config: any, { strapi }: { strapi: any }) => {
     let tenantSlug: string | undefined;  
 
     // Admin panel user (admin::user)  
-    if (ctx.state.admin_user) {  
-      const adminUser = await strapi.entityService.findOne('admin::user', ctx.state.admin_user.id, {  
-        populate: ['tenant'], // Assuming reverse relation exists  
-      });  
-      tenantSlug = adminUser.tenant?.slug;  
-    }  
+    if (ctx.session?.passport?.user) {
+      const adminId = ctx.session.passport.user;
+      const admin = await strapi.entityService.findOne('admin::user', adminId, {
+        populate: ['tenant'],
+      });
+      tenantSlug = admin?.tenant?.slug;
+    } 
 
     // API user (users-permissions)  
     else if (ctx.state.user) {  

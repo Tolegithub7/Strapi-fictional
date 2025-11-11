@@ -1,0 +1,61 @@
+module.exports = ({ strapi }) => ({  
+  async bootstrap() {  
+    const knex = require('knex');  
+    const path = require('path');  
+    const fs = require('fs');  
+
+    // Get tenants from default DB  
+    const defaultDb = knex({  
+      client: 'better-sqlite3',  
+      connection: { filename: path.resolve(process.cwd(), 'data', 'default.db') },  
+      useNullAsDefault: true,  
+    });  
+    const tenants = await defaultDb('tenants').select('slug');  
+    await defaultDb.destroy();  
+
+    for (const { slug } of tenants) {  
+      const dbPath = path.resolve(process.cwd(), 'data', `${slug}.db`);  
+      if (!fs.existsSync(dbPath)) continue;  
+
+      const tempKnex = knex({  
+        client: 'better-sqlite3',  
+        connection: { filename: dbPath },  
+        useNullAsDefault: true,  
+      });  
+
+      // Use Strapi's schema builder per model (content-types)  
+      // `strapi.db.metadata` is a Map of model metadata. Tell TS it's a Map<string, any>
+      const models = strapi.db.metadata as Map<string, any>; // All defined models
+      for (const [uid, model] of models.entries()) {
+        const modelAny = model as any;
+        if (uid.startsWith('api::tenant.') || uid === 'admin::user') continue; // Skip central  
+
+        // Build table if not exists  
+        await tempKnex.schema.createTableIfNotExists(model.tableName, (table) => {  
+          // Replicate Strapi's column builder (simplified; extend for types)  
+          table.increments('id').primary();  
+          for (const [attrName, attr] of Object.entries(modelAny.attributes) as [string, any][]) {
+                const attribute = attr as any;
+                switch (attribute.type) {
+                  case 'string': table.string(attrName); break;
+                  case 'text': table.text(attrName); break;
+                  case 'integer': table.integer(attrName); break;
+                  case 'json': table.json(attrName); break;
+                  case 'relation': // Handle FK
+                    table.integer(`${attrName}_id`).unsigned();
+                    // attribute.targetTable may not exist in metadata typings; cast to any
+                    table.foreign(`${attrName}_id`).references('id').inTable(attribute.targetTable || 'unknown');
+                    break;
+              // Add more types (richtext, boolean, etc.)  
+              default: table.string(attrName); // Fallback  
+            }  
+          }  
+          table.timestamps(true, true); // created/updated  
+        });  
+      }  
+
+      await tempKnex.destroy();  
+      console.log(`Auto-migrated schema for ${slug}.db`);  
+    }  
+  },  
+});  
